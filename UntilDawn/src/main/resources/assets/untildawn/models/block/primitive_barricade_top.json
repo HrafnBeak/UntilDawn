@@ -1,6 +1,89 @@
 {
-  "parent": "untildawn:block/wall_top",
-  "textures": {
-    "wall": "minecraft:block/oak_planks"
-  }
+	"format_version": "26.3",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"1": "untildawn:block/primitive_barricade_top",
+		"particle": "untildawn:block/primitive_barricade_top"
+	},
+	"elements": [
+		{
+			"from": [0, -1.05637, 4.04019],
+			"to": [16, 14.94363, 7.04019],
+			"rotation": {"angle": 20, "axis": "x", "origin": [8, 6.94363, 5.54019]},
+			"faces": {
+				"north": {"uv": [0, 0, 4, 4], "texture": "#1"},
+				"east": {"uv": [4, 0, 4.75, 4], "texture": "#1"},
+				"south": {"uv": [0, 4, 4, 8], "texture": "#1"},
+				"west": {"uv": [4, 4, 4.75, 8], "texture": "#1"},
+				"up": {"uv": [4.75, 0, 8.75, 0.75], "texture": "#1"},
+				"down": {"uv": [4.75, 0.75, 8.75, 1.5], "texture": "#1"}
+			}
+		},
+		{
+			"name": "Nail",
+			"from": [-0.5, 0.22083, 0.79682],
+			"to": [1.5, 2.22083, 4.89682],
+			"rotation": {"angle": 20, "axis": "x", "origin": [1, 1.22083, 0.79682]},
+			"faces": {
+				"north": {"uv": [6.25, 2, 6.75, 2.5], "texture": "#1"},
+				"east": {"uv": [4.75, 4.5, 5.75, 5], "texture": "#1"},
+				"south": {"uv": [6.25, 2.5, 6.75, 3], "texture": "#1"},
+				"west": {"uv": [4.75, 5, 5.75, 5.5], "texture": "#1"},
+				"up": {"uv": [5.25, 2.5, 5.75, 3.5], "texture": "#1"},
+				"down": {"uv": [5.25, 3.5, 5.75, 4.5], "texture": "#1"}
+			}
+		},
+		{
+			"name": "Nail",
+			"from": [14.5, 0.22083, 0.79682],
+			"to": [16.5, 2.22083, 4.89682],
+			"rotation": {"angle": 20, "axis": "x", "origin": [15, 1.22083, 0.79682]},
+			"faces": {
+				"north": {"uv": [6.25, 3, 6.75, 3.5], "texture": "#1"},
+				"east": {"uv": [4.75, 5.5, 5.75, 6], "texture": "#1"},
+				"south": {"uv": [6.25, 3.5, 6.75, 4], "texture": "#1"},
+				"west": {"uv": [5.75, 1.5, 6.75, 2], "texture": "#1"},
+				"up": {"uv": [5.75, 2, 6.25, 3], "texture": "#1"},
+				"down": {"uv": [5.75, 3, 6.25, 4], "texture": "#1"}
+			}
+		},
+		{
+			"name": "Nail",
+			"from": [14.5, 13.37652, 5.5851],
+			"to": [16.5, 15.47652, 9.6851],
+			"rotation": {"angle": 20, "axis": "x", "origin": [15, 14.37652, 5.5851]},
+			"faces": {
+				"north": {"uv": [6.25, 5, 6.75, 5.5], "texture": "#1"},
+				"east": {"uv": [5.75, 4, 6.75, 4.5], "texture": "#1"},
+				"south": {"uv": [6.25, 5.5, 6.75, 6], "texture": "#1"},
+				"west": {"uv": [5.75, 4.5, 6.75, 5], "texture": "#1"},
+				"up": {"uv": [5.75, 5, 6.25, 6], "texture": "#1"},
+				"down": {"uv": [4.75, 6, 5.25, 7], "texture": "#1"}
+			}
+		},
+		{
+			"name": "Nail",
+			"from": [-0.5, 13.37652, 5.5851],
+			"to": [1.5, 15.57652, 9.6851],
+			"rotation": {"angle": 20, "axis": "x", "origin": [1, 14.37652, 5.5851]},
+			"faces": {
+				"north": {"uv": [5.25, 6, 5.75, 6.5], "texture": "#1"},
+				"east": {"uv": [4.75, 1.5, 5.75, 2], "texture": "#1"},
+				"south": {"uv": [5.75, 6, 6.25, 6.5], "texture": "#1"},
+				"west": {"uv": [4.75, 2, 5.75, 2.5], "texture": "#1"},
+				"up": {"uv": [4.75, 2.5, 5.25, 3.5], "texture": "#1"},
+				"down": {"uv": [4.75, 3.5, 5.25, 4.5], "texture": "#1"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "top",
+			"origin": [0, 0, 0],
+			"scope": 0,
+			"color": 0,
+			"children": [0, 1, 2, 3, 4]
+		}
+	]
 }

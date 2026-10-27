@@ -1,6 +1,61 @@
 {
-  "parent": "untildawn:block/wall_middle",
-  "textures": {
-    "wall": "minecraft:block/oak_planks"
-  }
+	"format_version": "26.3",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"1": "untildawn:block/primitive_barricade_middle",
+		"particle": "untildawn:block/primitive_barricade_middle"
+	},
+	"elements": [
+		{
+			"name": "Nail",
+			"from": [14.5, 0.08335, -0.90904],
+			"to": [16.5, 2.08335, 3.19096],
+			"rotation": {"angle": 5, "axis": "x", "origin": [15, 1.08335, -0.90904]},
+			"faces": {
+				"north": {"uv": [4.75, 5.5, 5.25, 6], "texture": "#1"},
+				"east": {"uv": [4.75, 1.5, 5.75, 2], "texture": "#1"},
+				"south": {"uv": [5.25, 5.5, 5.75, 6], "texture": "#1"},
+				"west": {"uv": [4.75, 2, 5.75, 2.5], "texture": "#1"},
+				"up": {"uv": [4.75, 2.5, 5.25, 3.5], "texture": "#1"},
+				"down": {"uv": [4.75, 3.5, 5.25, 4.5], "texture": "#1"}
+			}
+		},
+		{
+			"name": "Nail",
+			"from": [-0.5, 0.08335, -0.90904],
+			"to": [1.5, 2.08335, 3.19096],
+			"rotation": {"angle": 5, "axis": "x", "origin": [1, 1.08335, -0.90904]},
+			"faces": {
+				"north": {"uv": [5.75, 1.5, 6.25, 2], "texture": "#1"},
+				"east": {"uv": [4.75, 4.5, 5.75, 5], "texture": "#1"},
+				"south": {"uv": [5.75, 2, 6.25, 2.5], "texture": "#1"},
+				"west": {"uv": [4.75, 5, 5.75, 5.5], "texture": "#1"},
+				"up": {"uv": [5.25, 2.5, 5.75, 3.5], "texture": "#1"},
+				"down": {"uv": [5.25, 3.5, 5.75, 4.5], "texture": "#1"}
+			}
+		},
+		{
+			"from": [0, -0.16118, 0.69154],
+			"to": [16, 15.83882, 3.69154],
+			"rotation": {"angle": 5, "axis": "x", "origin": [8, 7.83882, 2.19154]},
+			"faces": {
+				"north": {"uv": [0, 0, 4, 4], "texture": "#1"},
+				"east": {"uv": [4, 0, 4.75, 4], "texture": "#1"},
+				"south": {"uv": [0, 4, 4, 8], "texture": "#1"},
+				"west": {"uv": [4, 4, 4.75, 8], "texture": "#1"},
+				"up": {"uv": [4.75, 0, 8.75, 0.75], "texture": "#1"},
+				"down": {"uv": [4.75, 0.75, 8.75, 1.5], "texture": "#1"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "middle",
+			"origin": [0, 0, 0],
+			"scope": 0,
+			"color": 0,
+			"children": [0, 1, 2]
+		}
+	]
 }

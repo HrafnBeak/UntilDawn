@@ -1,5 +1,6 @@
 {
 	"format_version": "26.3",
+	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
 		"0": "untildawn:block/core_beams",
@@ -9,8 +10,9 @@
 	},
 	"elements": [
 		{
+			"name": "Corner",
 			"from": [0, 0, 0],
-			"to": [2, 2, 2],
+			"to": [3, 3, 3],
 			"faces": {
 				"north": {"uv": [0, 0, 2, 2], "texture": "#1"},
 				"east": {"uv": [0, 2, 2, 4], "texture": "#1"},
@@ -21,8 +23,9 @@
 			}
 		},
 		{
-			"from": [0, 14, 0],
-			"to": [2, 16, 2],
+			"name": "Corner",
+			"from": [0, 13, 0],
+			"to": [3, 16, 3],
 			"rotation": {"angle": 0, "axis": "y", "origin": [0, 14, 0]},
 			"faces": {
 				"north": {"uv": [2, 4, 4, 6], "texture": "#1"},
@@ -34,8 +37,9 @@
 			}
 		},
 		{
-			"from": [14, 14, 0],
-			"to": [16, 16, 2],
+			"name": "Corner",
+			"from": [13, 13, 0],
+			"to": [16, 16, 3],
 			"rotation": {"angle": 0, "axis": "y", "origin": [14, 14, 0]},
 			"faces": {
 				"north": {"uv": [6, 2, 8, 4], "texture": "#1"},
@@ -47,7 +51,8 @@
 			}
 		},
 		{
-			"from": [14, 14, 14],
+			"name": "Corner",
+			"from": [13, 13, 13],
 			"to": [16, 16, 16],
 			"rotation": {"angle": 0, "axis": "y", "origin": [14, 14, 14]},
 			"faces": {
@@ -60,8 +65,9 @@
 			}
 		},
 		{
-			"from": [0, 14, 14],
-			"to": [2, 16, 16],
+			"name": "Corner",
+			"from": [0, 13, 13],
+			"to": [3, 16, 16],
 			"rotation": {"angle": 0, "axis": "y", "origin": [0, 14, 14]},
 			"faces": {
 				"north": {"uv": [8, 8, 10, 10], "texture": "#1"},
@@ -73,8 +79,9 @@
 			}
 		},
 		{
-			"from": [14, 0, 0],
-			"to": [16, 2, 2],
+			"name": "Corner",
+			"from": [13, 0, 0],
+			"to": [16, 3, 3],
 			"rotation": {"angle": 0, "axis": "y", "origin": [14, 0, 0]},
 			"faces": {
 				"north": {"uv": [10, 4, 12, 6], "texture": "#1"},
@@ -86,8 +93,9 @@
 			}
 		},
 		{
-			"from": [14, 0, 14],
-			"to": [16, 2, 16],
+			"name": "Corner",
+			"from": [13, 0, 13],
+			"to": [16, 3, 16],
 			"rotation": {"angle": 0, "axis": "y", "origin": [14, 0, 14]},
 			"faces": {
 				"north": {"uv": [0, 12, 2, 14], "texture": "#1"},
@@ -99,8 +107,9 @@
 			}
 		},
 		{
-			"from": [0, 0, 14],
-			"to": [2, 2, 16],
+			"name": "Corner",
+			"from": [0, 0, 13],
+			"to": [3, 3, 16],
 			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 14]},
 			"faces": {
 				"north": {"uv": [6, 12, 8, 14], "texture": "#1"},
@@ -112,7 +121,7 @@
 			}
 		},
 		{
-			"name": "core",
+			"name": "Core",
 			"from": [5, 5, 5],
 			"to": [11, 11, 11],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
@@ -126,23 +135,9 @@
 			}
 		},
 		{
-			"name": "core",
-			"from": [5, 5, 5],
-			"to": [11, 11, 11],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
-			"faces": {
-				"north": {"uv": [0, 0, 3, 3], "texture": "#2"},
-				"east": {"uv": [0, 3, 3, 6], "texture": "#2"},
-				"south": {"uv": [3, 0, 6, 3], "texture": "#2"},
-				"west": {"uv": [3, 3, 6, 6], "texture": "#2"},
-				"up": {"uv": [0, 6, 3, 9], "texture": "#2"},
-				"down": {"uv": [6, 0, 9, 3], "texture": "#2"}
-			}
-		},
-		{
-			"name": "beam_x",
+			"name": "Beam",
 			"from": [2, 0.5, 0.5],
-			"to": [14, 1.5, 1.5],
+			"to": [14, 2.5, 2.5],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 6, 0.5], "texture": "#0"},
@@ -154,9 +149,9 @@
 			}
 		},
 		{
-			"name": "beam_y",
+			"name": "Beam",
 			"from": [0.5, 2, 0.5],
-			"to": [1.5, 14, 1.5],
+			"to": [2.5, 14, 2.5],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
 			"faces": {
 				"north": {"uv": [0, 2, 0.5, 8], "texture": "#0"},
@@ -168,9 +163,9 @@
 			}
 		},
 		{
-			"name": "beam_z",
+			"name": "Beam",
 			"from": [0.5, 0.5, 2],
-			"to": [1.5, 1.5, 14],
+			"to": [2.5, 2.5, 14],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
 			"faces": {
 				"north": {"uv": [9, 9, 9.5, 9.5], "texture": "#0"},
@@ -182,9 +177,9 @@
 			}
 		},
 		{
-			"name": "beam_x",
-			"from": [2, 0.5, 14.5],
-			"to": [14, 1.5, 15.5],
+			"name": "Beam",
+			"from": [2, 0.5, 13.5],
+			"to": [14, 2.5, 15.5],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
 			"faces": {
 				"north": {"uv": [3, 3, 9, 3.5], "texture": "#0"},
@@ -196,9 +191,9 @@
 			}
 		},
 		{
-			"name": "beam_y",
-			"from": [0.5, 2, 14.5],
-			"to": [1.5, 14, 15.5],
+			"name": "Beam",
+			"from": [0.5, 2, 13.5],
+			"to": [2.5, 14, 15.5],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
 			"faces": {
 				"north": {"uv": [3, 5, 3.5, 11], "texture": "#0"},
@@ -210,9 +205,9 @@
 			}
 		},
 		{
-			"name": "beam_z",
-			"from": [0.5, 14.5, 2],
-			"to": [1.5, 15.5, 14],
+			"name": "Beam",
+			"from": [0.5, 13.5, 2],
+			"to": [2.5, 15.5, 14],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
 			"faces": {
 				"north": {"uv": [9.5, 9, 10, 9.5], "texture": "#0"},
@@ -224,9 +219,9 @@
 			}
 		},
 		{
-			"name": "beam_x",
-			"from": [2, 14.5, 0.5],
-			"to": [14, 15.5, 1.5],
+			"name": "Beam",
+			"from": [2, 13.5, 0.5],
+			"to": [14, 15.5, 2.5],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
 			"faces": {
 				"north": {"uv": [6, 0, 12, 0.5], "texture": "#0"},
@@ -238,9 +233,9 @@
 			}
 		},
 		{
-			"name": "beam_y",
-			"from": [14.5, 2, 0.5],
-			"to": [15.5, 14, 1.5],
+			"name": "Beam",
+			"from": [13.5, 2, 0.5],
+			"to": [15.5, 14, 2.5],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
 			"faces": {
 				"north": {"uv": [6, 6, 6.5, 12], "texture": "#0"},
@@ -252,9 +247,9 @@
 			}
 		},
 		{
-			"name": "beam_z",
-			"from": [14.5, 0.5, 2],
-			"to": [15.5, 1.5, 14],
+			"name": "Beam",
+			"from": [13.5, 0.5, 2],
+			"to": [15.5, 2.5, 14],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
 			"faces": {
 				"north": {"uv": [9, 10, 9.5, 10.5], "texture": "#0"},
@@ -266,8 +261,8 @@
 			}
 		},
 		{
-			"name": "beam_x",
-			"from": [2, 14.5, 14.5],
+			"name": "Beam",
+			"from": [2, 13.5, 13.5],
 			"to": [14, 15.5, 15.5],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
 			"faces": {
@@ -280,8 +275,8 @@
 			}
 		},
 		{
-			"name": "beam_y",
-			"from": [14.5, 2, 14.5],
+			"name": "Beam",
+			"from": [13.5, 2, 13.5],
 			"to": [15.5, 14, 15.5],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
 			"faces": {
@@ -294,8 +289,8 @@
 			}
 		},
 		{
-			"name": "beam_z",
-			"from": [14.5, 14.5, 2],
+			"name": "Beam",
+			"from": [13.5, 13.5, 2],
 			"to": [15.5, 15.5, 14],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
 			"faces": {

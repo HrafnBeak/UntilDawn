@@ -84,6 +84,12 @@ public final class WaveManager {
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> hideBossBar());
 
         ServerEntityEvents.ALLOW_LOAD.register((entity, level, spawnReason, isLoadedFromDisk) -> {
+            // A mount's riders are added after it, even when it was turned away. Such a rider would sit on nothing,
+            // never ticking, burning or despawning, so a rider whose mount isn't in the level is turned away too.
+            Entity vehicle = entity.getVehicle();
+            if (vehicle != null && !isLoadedFromDisk && level.getEntity(vehicle.getId()) != vehicle) {
+                return false;
+            }
             CoreState state = CoreState.get(level.getServer());
             if (!state.active) {
                 // Leftover wave mobs from a finished game are dropped as their chunks load.
