@@ -1,0 +1,13 @@
+{
+  "result": "untildawn:heavy_crossbow",
+  "parent": "untildawn:arrow",
+  "research_cost": 60,
+  "craft_cost": [
+    { "ingredient": "minecraft:crossbow", "count": 1 },
+    { "ingredient": "minecraft:iron_ingot", "count": 16 },
+    { "ingredient": "minecraft:string", "count": 6 },
+    { "ingredient": "minecraft:tripwire_hook", "count": 2 },
+    { "ingredient": "minecraft:diamond", "count": 1 },
+    { "ingredient": "minecraft:stone_button", "count": 2 }
+  ]
+}

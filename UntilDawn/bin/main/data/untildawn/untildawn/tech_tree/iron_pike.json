@@ -1,0 +1,10 @@
+{
+  "result": "untildawn:iron_pike",
+  "parent": "untildawn:copper_pike",
+  "research_cost": 60,
+  "craft_cost": [
+    { "ingredient": "minecraft:iron_sword", "count": 1 },
+    { "ingredient": "minecraft:iron_ingot", "count": 1 },
+    { "ingredient": "minecraft:stick", "count": 1 }
+  ]
+}

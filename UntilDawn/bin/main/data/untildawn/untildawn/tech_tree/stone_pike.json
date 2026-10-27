@@ -1,0 +1,10 @@
+{
+  "result": "untildawn:stone_pike",
+  "parent": "untildawn:wooden_pike",
+  "research_cost": 25,
+  "craft_cost": [
+    { "ingredient": "minecraft:stone_sword", "count": 1 },
+    { "ingredient": "#minecraft:stone_tool_materials", "count": 1 },
+    { "ingredient": "minecraft:stick", "count": 1 }
+  ]
+}

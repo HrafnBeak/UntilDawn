@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "#minecraft:netherite_tool_materials",
+  "base": "untildawn:diamond_pike",
+  "result": {
+    "id": "untildawn:netherite_pike"
+  },
+  "template": "minecraft:netherite_upgrade_smithing_template"
+}

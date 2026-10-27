@@ -1,0 +1,9 @@
+{
+  "result": "untildawn:wooden_pike",
+  "research_cost": 15,
+  "craft_cost": [
+    { "ingredient": "minecraft:wooden_sword", "count": 1 },
+    { "ingredient": "#minecraft:planks", "count": 1 },
+    { "ingredient": "minecraft:stick", "count": 1 }
+  ]
+}

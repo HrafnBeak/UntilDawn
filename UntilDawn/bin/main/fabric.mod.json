@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "untildawn",
+  "version": "${version}",
+  "name": "UntilDawn",
+  "description": "Place the Core and defend it from ever-growing waves of Miners, Builders, Bombers, Archers and Longbow Men every night.",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "org.kennyerf.untildawn.client.UntilDawnDataGenerator"
+    ],
+    "client": [
+      "org.kennyerf.untildawn.client.UntilDawnClient"
+    ],
+    "main": [
+      "org.kennyerf.untildawn.UntilDawn"
+    ]
+  },
+  "mixins": [
+    "untildawn.mixins.json",
+    {
+      "config": "untildawn.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  },
+  "suggests": {
+    "baritone": "*"
+  }
+}

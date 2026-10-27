@@ -1,0 +1,10 @@
+{
+  "result": "untildawn:primitive_barricade",
+  "research_cost": 5,
+  "craft_cost": [
+    {
+      "ingredient": "#minecraft:planks",
+      "count": 6
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "result": "untildawn:diamond_pike",
+  "parent": "untildawn:iron_pike",
+  "research_cost": 100,
+  "craft_cost": [
+    { "ingredient": "minecraft:diamond_sword", "count": 1 },
+    { "ingredient": "minecraft:diamond", "count": 1 },
+    { "ingredient": "minecraft:stick", "count": 1 }
+  ]
+}

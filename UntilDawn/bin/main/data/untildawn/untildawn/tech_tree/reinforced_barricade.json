@@ -1,0 +1,15 @@
+{
+  "result": "untildawn:reinforced_barricade",
+  "parent": "untildawn:primitive_barricade",
+  "research_cost": 15,
+  "craft_cost": [
+    {
+      "ingredient": "#minecraft:stone_tool_materials",
+      "count": 6
+    },
+    {
+      "ingredient": "minecraft:iron_ingot",
+      "count": 2
+    }
+  ]
+}

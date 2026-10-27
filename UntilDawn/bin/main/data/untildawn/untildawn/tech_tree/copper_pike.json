@@ -1,0 +1,10 @@
+{
+  "result": "untildawn:copper_pike",
+  "parent": "untildawn:stone_pike",
+  "research_cost": 40,
+  "craft_cost": [
+    { "ingredient": "minecraft:copper_sword", "count": 1 },
+    { "ingredient": "minecraft:copper_ingot", "count": 1 },
+    { "ingredient": "minecraft:stick", "count": 1 }
+  ]
+}

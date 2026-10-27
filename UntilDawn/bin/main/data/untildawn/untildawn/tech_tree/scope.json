@@ -1,0 +1,11 @@
+{
+  "result": "untildawn:scope",
+  "parent": "untildawn:heavy_crossbow",
+  "research_cost": 40,
+  "craft_cost": [
+    { "ingredient": "minecraft:spyglass", "count": 1 },
+    { "ingredient": "minecraft:diamond", "count": 2 },
+    { "ingredient": "minecraft:redstone", "count": 5 },
+    { "ingredient": "minecraft:glass", "count": 16 }
+  ]
+}

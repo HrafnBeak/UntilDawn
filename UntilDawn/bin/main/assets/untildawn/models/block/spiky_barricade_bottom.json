@@ -1,0 +1,6 @@
+{
+  "parent": "untildawn:block/wall_bottom",
+  "textures": {
+    "wall": "minecraft:block/spruce_planks"
+  }
+}

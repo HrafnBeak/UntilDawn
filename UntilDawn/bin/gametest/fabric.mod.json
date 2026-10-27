@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "untildawn-test",
+  "version": "1.0.0",
+  "name": "UntilDawn Game Tests",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "org.kennyerf.untildawn.test.UntilDawnGameTests"
+    ],
+    "fabric-client-gametest": [
+      "org.kennyerf.untildawn.test.WorkbenchClientGameTests",
+      "org.kennyerf.untildawn.test.UntilDawnClientGameTests"
+    ]
+  },
+  "depends": {
+    "untildawn": "*",
+    "fabric-gametest-api-v1": "*"
+  }
+}

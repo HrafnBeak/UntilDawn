@@ -1,0 +1,16 @@
+{
+  "result": "untildawn:spiky_barricade",
+  "parent": "untildawn:primitive_barricade",
+  "research_cost": 15,
+  "craft_cost": [
+    {
+      "ingredient": "#minecraft:planks",
+      "count": 6
+    },
+    {
+      "ingredient": "minecraft:iron_ingot",
+      "count": 2
+    }
+  ],
+  "order": 1
+}

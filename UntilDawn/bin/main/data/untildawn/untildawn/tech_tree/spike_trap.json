@@ -1,0 +1,16 @@
+{
+  "result": "untildawn:spike_trap",
+  "parent": "untildawn:spiky_barricade",
+  "research_cost": 20,
+  "craft_cost": [
+    {
+      "ingredient": "minecraft:iron_ingot",
+      "count": 3
+    },
+    {
+      "ingredient": "minecraft:flint",
+      "count": 2
+    }
+  ],
+  "order": 1
+}

@@ -38,6 +38,8 @@ public final class ModBlocks {
                     .requiresCorrectToolForDrops()
                     .strength(25.0F, 3_600_000.0F)
                     .lightLevel(state -> 15)
+                    // The model is an open frame, so neighbouring faces must still be drawn.
+                    .noOcclusion()
                     .sound(SoundType.LODESTONE)
                     .pushReaction(PushReaction.IMMOVEABLE)
     ));

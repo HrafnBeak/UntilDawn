@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "untildawn:reinforced_barricade",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "untildawn:reinforced_barricade",
+            "state": {
+              "part": "bottom"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

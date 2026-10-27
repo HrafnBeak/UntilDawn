@@ -1,0 +1,10 @@
+{
+  "result": "untildawn:grappling_gun",
+  "research_cost": 80,
+  "craft_cost": [
+    { "ingredient": "minecraft:diamond", "count": 5 },
+    { "ingredient": "untildawn:scrap", "count": 32 },
+    { "ingredient": "minecraft:tripwire_hook", "count": 1 },
+    { "ingredient": "minecraft:iron_chain", "count": 16 }
+  ]
+}

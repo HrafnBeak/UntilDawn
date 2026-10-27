@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "untildawn:unstable_planks",
+    "untildawn:unstable_ladder",
+    "untildawn:workbench",
+    "untildawn:primitive_barricade",
+    "untildawn:spiky_barricade"
+  ]
+}
