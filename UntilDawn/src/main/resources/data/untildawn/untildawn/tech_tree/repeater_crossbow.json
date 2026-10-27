@@ -1,0 +1,11 @@
+{
+  "result": "untildawn:repeater_crossbow",
+  "parent": "untildawn:arrow",
+  "research_cost": 40,
+  "craft_cost": [
+    { "ingredient": "minecraft:crossbow", "count": 1 },
+    { "ingredient": "minecraft:iron_ingot", "count": 3 },
+    { "ingredient": "minecraft:redstone", "count": 2 }
+  ],
+  "order": 4
+}

@@ -43,6 +43,8 @@ public class CoreState extends SavedData {
     int waveAlive;
     /** The number the next night will have, set with {@code /untildawn night}; 0 = the one after the last. */
     int nextNight;
+    /** Set from the Core screen: the daylight is sped up until night comes. Not saved. */
+    boolean skippingToNight;
 
     public CoreState() {
         this(false, Level.OVERWORLD, BlockPos.ZERO, WaveManager.DEFAULT_CORE_HEALTH, 0, false, 0, 0, 0, 0);

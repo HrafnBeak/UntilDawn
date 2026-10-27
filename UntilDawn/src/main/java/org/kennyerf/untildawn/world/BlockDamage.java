@@ -12,6 +12,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 import org.kennyerf.untildawn.entity.ArcherSkeleton;
 import org.kennyerf.untildawn.pathing.PathCosts;
@@ -92,6 +93,30 @@ public final class BlockDamage {
             level.destroyBlockProgress(entry.crackId, pos, stage);
         }
         return false;
+    }
+
+    /**
+     * A Bomber's blast: each block within {@code radius} of the centre takes up to {@code power} ticks of digging damage,
+     * most at the centre and none just past the radius, so weak walls fall and strong ones are only cracked.
+     */
+    public static void blast(ServerLevel level, Vec3 centre, double radius, double power, @Nullable Entity source) {
+        if (power <= 0 || radius <= 0) {
+            return;
+        }
+        int reach = (int) Math.ceil(radius);
+        BlockPos origin = BlockPos.containing(centre);
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int dx = -reach; dx <= reach; dx++) {
+            for (int dy = -reach; dy <= reach; dy++) {
+                for (int dz = -reach; dz <= reach; dz++) {
+                    pos.set(origin.getX() + dx, origin.getY() + dy, origin.getZ() + dz);
+                    double distance = centre.distanceTo(Vec3.atCenterOf(pos));
+                    if (distance <= radius && !level.getBlockState(pos).isAir()) {
+                        damage(level, pos.immutable(), power * (1.0 - distance / (radius + 1.0)), source);
+                    }
+                }
+            }
+        }
     }
 
     /**

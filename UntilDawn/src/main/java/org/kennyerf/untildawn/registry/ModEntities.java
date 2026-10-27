@@ -12,6 +12,9 @@ import org.kennyerf.untildawn.UntilDawn;
 import org.kennyerf.untildawn.entity.ArcherSkeleton;
 import org.kennyerf.untildawn.entity.Assassin;
 import org.kennyerf.untildawn.entity.SneakingSpider;
+import org.kennyerf.untildawn.entity.NetShot;
+import org.kennyerf.untildawn.entity.ThrownFireFlask;
+import org.kennyerf.untildawn.entity.ThrownSapperFlask;
 import org.kennyerf.untildawn.entity.WebShot;
 import org.kennyerf.untildawn.entity.Webber;
 import org.kennyerf.untildawn.entity.BomberCreeper;
@@ -71,6 +74,18 @@ public final class ModEntities {
     public static final EntityType<WebShot> WEB_SHOT = register("web_shot",
             EntityType.Builder.<WebShot>of(WebShot::new, MobCategory.MISC)
                     .noLootTable().sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
+
+    public static final EntityType<NetShot> NET_SHOT = register("net_shot",
+            EntityType.Builder.<NetShot>of(NetShot::new, MobCategory.MISC)
+                    .noLootTable().sized(0.5F, 0.5F).eyeHeight(0.13F).clientTrackingRange(4).updateInterval(20));
+
+    public static final EntityType<ThrownFireFlask> FIRE_FLASK = register("fire_flask",
+            EntityType.Builder.<ThrownFireFlask>of(ThrownFireFlask::new, MobCategory.MISC)
+                    .noLootTable().sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
+
+    public static final EntityType<ThrownSapperFlask> SAPPER_FLASK = register("sapper_flask",
+            EntityType.Builder.<ThrownSapperFlask>of(ThrownSapperFlask::new, MobCategory.MISC)
+                    .noLootTable().sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10));
 
     private ModEntities() {
     }

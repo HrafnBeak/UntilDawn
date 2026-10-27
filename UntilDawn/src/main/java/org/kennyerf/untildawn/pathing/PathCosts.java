@@ -72,6 +72,9 @@ public final class PathCosts {
     /** Extra for a cell another mob stands on or is about to walk through, so mobs spread out. */
     public static final double CROWD = 3.0;
 
+    /** Hardness beyond this adds nothing to the planning cost of digging (see {@link #mine}). */
+    private static final float MAX_PLANNED_HARDNESS = 3.0F;
+
     private PathCosts() {
     }
 
@@ -85,8 +88,12 @@ public final class PathCosts {
         return 2.0 + blocks * FALL_PER_BLOCK;
     }
 
-    /** Planning cost of digging: stone ~ 5 blocks of walking, obsidian ~ 110. */
+    /**
+     * Planning cost of digging: stone ~ 5 blocks of walking, anything from hardness 3 up (iron, obsidian, barricades) ~ 38.
+     * Harder blocks really do take a Miner longer ({@link #mineTicks}), but priced by that they would cost more than a
+     * search can flood the ground to compare with, and it would give up and stop at the wall instead of planning the dig.
+     */
     static double mine(float hardness) {
-        return 8.0 + hardness * 10.0;
+        return 8.0 + Math.min(hardness, MAX_PLANNED_HARDNESS) * 10.0;
     }
 }

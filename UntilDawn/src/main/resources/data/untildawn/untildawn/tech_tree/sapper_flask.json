@@ -1,0 +1,11 @@
+{
+  "result": "untildawn:sapper_flask",
+  "parent": "untildawn:fire_flask",
+  "research_cost": 40,
+  "craft_cost": [
+    { "ingredient": "minecraft:glass_bottle", "count": 1 },
+    { "ingredient": "minecraft:gunpowder", "count": 5 },
+    { "ingredient": "minecraft:iron_nugget", "count": 2 },
+    { "ingredient": "minecraft:sand", "count": 4 }
+  ]
+}

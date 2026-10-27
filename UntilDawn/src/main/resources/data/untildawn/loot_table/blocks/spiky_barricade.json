@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "untildawn:spiky_barricade",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "untildawn:spiky_barricade",
+            "state": {
+              "part": "bottom"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

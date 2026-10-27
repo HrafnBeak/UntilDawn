@@ -1,0 +1,12 @@
+{
+  "result": "untildawn:chain_crossbow",
+  "parent": "untildawn:repeater_crossbow",
+  "research_cost": 80,
+  "craft_cost": [
+    { "ingredient": "untildawn:repeater_crossbow", "count": 1 },
+    { "ingredient": "minecraft:diamond", "count": 2 },
+    { "ingredient": "minecraft:lever", "count": 1 },
+    { "ingredient": "minecraft:comparator", "count": 1 },
+    { "ingredient": "minecraft:crossbow", "count": 6 }
+  ]
+}

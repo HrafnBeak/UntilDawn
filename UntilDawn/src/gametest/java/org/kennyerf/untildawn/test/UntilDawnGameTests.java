@@ -5,6 +5,16 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.monster.zombie.Husk;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.AttachFace;
+import net.minecraft.world.phys.Vec3;
+import org.kennyerf.untildawn.block.BarricadeBlock;
+import org.kennyerf.untildawn.block.CrossbowSentryBlock;
+import org.kennyerf.untildawn.block.SpikeTrapBlock;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -25,10 +35,16 @@ import net.minecraft.world.entity.projectile.arrow.Arrow;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ChargedProjectiles;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
+import org.kennyerf.untildawn.item.HeavyCrossbowItem;
+import org.kennyerf.untildawn.item.ScopedHeavyCrossbowItem;
+import org.kennyerf.untildawn.recipe.ScopeRecipes;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.enchantment.Enchantment;
 import org.kennyerf.untildawn.UntilDawn;
 import org.kennyerf.untildawn.baritone.BaritonePrediction;
 import org.kennyerf.untildawn.command.ItemList;
@@ -119,16 +135,335 @@ public class UntilDawnGameTests {
 
     // ---------------------------------------------------------------- workbench
 
-    /** The mod's datapack tech tree loads, in order, with tags in its craft costs resolved. */
+    /** The mod's datapack tech tree loads, with tags in its craft costs resolved and the Fortification tree as its own root. */
     @GameTest(structure = ARENA)
     public void techTreeLoads(GameTestHelper helper) {
         List<TechNode> nodes = TechTree.all();
-        helper.assertValueEqual(nodes.size(), 3, "tech tree items");
-        helper.assertTrue(nodes.get(0).createResult().is(Items.WOODEN_SWORD) && nodes.get(0).parent().isEmpty(), "the wooden sword is the top");
-        helper.assertTrue(nodes.get(2).createResult().is(Items.IRON_SWORD) && nodes.get(2).researchCost() == 30, "the iron sword is last");
-        TechNode.Cost planks = nodes.get(0).craftCost().getFirst();
-        helper.assertTrue(planks.ingredient().test(new ItemStack(Items.BIRCH_PLANKS)) && planks.count() == 2, "any planks will do");
+        helper.assertValueEqual(nodes.size(), 19, "tech tree items");
+        TechNode woodenPike = TechTree.get(UntilDawn.id("wooden_pike"));
+        helper.assertTrue(woodenPike != null && woodenPike.parent().isEmpty() && woodenPike.craftCost().getFirst().ingredient().test(new ItemStack(Items.WOODEN_SWORD))
+                && woodenPike.craftCost().get(1).ingredient().test(new ItemStack(Items.OAK_PLANKS)), "the Pike tree starts at the Wooden Pike, made from a wooden sword");
+        helper.assertValueEqual(TechTree.get(UntilDawn.id("diamond_pike")).parent().orElse(null), UntilDawn.id("iron_pike"), "diamond pike parent");
+        helper.assertTrue(TechTree.get(UntilDawn.id("netherite_pike")) == null, "the Netherite Pike is smithed, not researched");
+        helper.assertTrue(TechTree.get(UntilDawn.id("grappling_gun")).parent().isEmpty(), "the Grappling Gun has no prerequisite");
+        TechNode arrow = TechTree.get(UntilDawn.id("arrow"));
+        helper.assertTrue(arrow != null && arrow.createResult().is(Items.ARROW) && arrow.createResult().getCount() == 16 && arrow.parent().isEmpty()
+                && arrow.researchCost() == 20, "arrows are a top, 16 at a time, for 20 Scrap");
+        TechNode.Cost sticks = arrow.craftCost().getFirst();
+        helper.assertTrue(sticks.ingredient().test(new ItemStack(Items.STICK)) && sticks.count() == 16, "16 sticks");
+        helper.assertTrue(arrow.craftCost().get(2).ingredient().test(new ItemStack(ModItems.SCRAP)) && arrow.craftCost().get(2).count() == 3, "3 Scrap");
+        helper.assertValueEqual(TechTree.get(UntilDawn.id("repeater_crossbow")).parent().orElse(null), UntilDawn.id("arrow"), "repeater parent");
+        helper.assertValueEqual(TechTree.get(UntilDawn.id("heavy_crossbow")).parent().orElse(null), UntilDawn.id("arrow"), "heavy crossbow parent");
+        helper.assertValueEqual(TechTree.get(UntilDawn.id("chain_crossbow")).parent().orElse(null), UntilDawn.id("repeater_crossbow"), "chain crossbow parent");
+        helper.assertValueEqual(TechTree.get(UntilDawn.id("scope")).parent().orElse(null), UntilDawn.id("heavy_crossbow"), "scope parent");
+
+        TechNode primitive = TechTree.get(UntilDawn.id("primitive_barricade"));
+        helper.assertTrue(primitive != null && primitive.parent().isEmpty() && primitive.createResult().is(ModItems.PRIMITIVE_BARRICADE),
+                "the Primitive Barricade starts the Fortification tree");
+        helper.assertValueEqual(TechTree.get(UntilDawn.id("reinforced_barricade")).parent().orElse(null), UntilDawn.id("primitive_barricade"), "reinforced parent");
+        helper.assertValueEqual(TechTree.get(UntilDawn.id("spiky_barricade")).parent().orElse(null), UntilDawn.id("primitive_barricade"), "spiky parent");
+        helper.assertValueEqual(TechTree.get(UntilDawn.id("crossbow_sentry")).parent().orElse(null), UntilDawn.id("spiky_barricade"), "sentry parent");
+        helper.assertValueEqual(TechTree.get(UntilDawn.id("spike_trap")).parent().orElse(null), UntilDawn.id("spiky_barricade"), "spike trap parent");
         helper.succeed();
+    }
+
+    /** Sets a barricade up the way placing its item does: the bottom block, then the other two. */
+    private static BlockPos placeWall(GameTestHelper helper, Block wall, BlockPos pos, Direction facing) {
+        BlockState bottom = wall.defaultBlockState().setValue(BarricadeBlock.FACING, facing);
+        helper.setBlock(pos, bottom);
+        wall.setPlacedBy(helper.getLevel(), helper.absolutePos(pos), bottom, null, ItemStack.EMPTY);
+        return pos;
+    }
+
+    private static Husk durableHusk(GameTestHelper helper, Vec3 pos) {
+        Husk husk = helper.spawn(EntityTypes.HUSK, pos);
+        husk.setNoAi(true);
+        husk.getAttribute(Attributes.MAX_HEALTH).setBaseValue(100.0);
+        husk.setHealth(100.0F);
+        return husk;
+    }
+
+    /** A wall is three blocks tall; breaking any of them removes all three, and it drops one item. */
+    @GameTest(structure = ARENA)
+    public void barricadeIsOneThreeBlockWall(GameTestHelper helper) {
+        BlockPos pos = placeWall(helper, ModBlocks.PRIMITIVE_BARRICADE, new BlockPos(8, 1, 8), Direction.NORTH);
+        for (BarricadeBlock.Part part : BarricadeBlock.Part.values()) {
+            BlockState state = helper.getBlockState(pos.above(part.ordinal()));
+            helper.assertTrue(state.is(ModBlocks.PRIMITIVE_BARRICADE) && state.getValue(BarricadeBlock.PART) == part, "part " + part);
+        }
+        helper.getLevel().destroyBlock(helper.absolutePos(pos.above()), true);
+        for (int i = 0; i < 3; i++) {
+            helper.assertBlockPresent(Blocks.AIR, pos.above(i));
+        }
+        long drops = helper.getEntities(EntityTypes.ITEM).stream().filter(item -> item.getItem().is(ModItems.PRIMITIVE_BARRICADE)).count();
+        helper.assertValueEqual(drops, 1L, "barricades dropped");
+        helper.succeed();
+    }
+
+    /** Mined from the front a wall is 3 times as hard as from behind (15 against 5), 5 times when reinforced (25) and 4 when spiky (20). */
+    @GameTest(structure = ARENA)
+    public void barricadeIsHarderFromTheFront(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        Block[] walls = {ModBlocks.PRIMITIVE_BARRICADE, ModBlocks.REINFORCED_BARRICADE, ModBlocks.SPIKY_BARRICADE};
+        float[] ratios = {3.0F, 5.0F, 4.0F};
+        for (int i = 0; i < walls.length; i++) {
+            BlockPos pos = placeWall(helper, walls[i], new BlockPos(8, 1, 8), Direction.NORTH);
+            BlockPos at = helper.absolutePos(pos);
+            BlockState state = helper.getBlockState(pos);
+            // Facing north, the front is the north side.
+            player.setPos(at.getX() + 0.5, at.getY(), at.getZ() - 2.5);
+            float front = state.getDestroyProgress(player, helper.getLevel(), at);
+            player.setPos(at.getX() + 0.5, at.getY(), at.getZ() + 3.5);
+            float back = state.getDestroyProgress(player, helper.getLevel(), at);
+            helper.assertTrue(Math.abs(back / front - ratios[i]) < 0.01F, walls[i] + " should be " + ratios[i] + "x easier from behind, was " + back / front);
+            helper.getLevel().destroyBlock(at, false);
+        }
+        helper.succeed();
+    }
+
+    /** Spikes hurt whatever touches them, once, then need a second to come back up. */
+    @GameTest(structure = ARENA, maxTicks = 100)
+    public void spikeTrapHurtsThenRecharges(GameTestHelper helper) {
+        BlockPos pos = new BlockPos(8, 1, 8);
+        helper.setBlock(pos, ModBlocks.SPIKE_TRAP.defaultBlockState().setValue(SpikeTrapBlock.FACE, AttachFace.FLOOR));
+        Husk target = durableHusk(helper, Vec3.atBottomCenterOf(pos));
+        helper.runAfterDelay(10, () -> {
+            helper.assertTrue(Math.abs(target.getHealth() - 80.0F) < 1.0F, "20 damage from the spikes, health was " + target.getHealth());
+            helper.assertTrue(!helper.getBlockState(pos).getValue(SpikeTrapBlock.READY), "the spikes should be down");
+        });
+        helper.runAfterDelay(30, () -> {
+            helper.assertTrue(helper.getBlockState(pos).getValue(SpikeTrapBlock.READY) || target.getHealth() < 61.0F,
+                    "the spikes should be back up (or have struck again)");
+            helper.succeed();
+        });
+    }
+
+    /** A Spiky Barricade hurts what stands against it, and a plain one doesn't. */
+    @GameTest(structure = ARENA, maxTicks = 100)
+    public void spikyBarricadeHurtsWhatTouchesIt(GameTestHelper helper) {
+        placeWall(helper, ModBlocks.SPIKY_BARRICADE, new BlockPos(4, 1, 8), Direction.NORTH);
+        placeWall(helper, ModBlocks.PRIMITIVE_BARRICADE, new BlockPos(12, 1, 8), Direction.NORTH);
+        Husk spiked = durableHusk(helper, new Vec3(4.5, 1, 7.7));
+        Husk plain = durableHusk(helper, new Vec3(12.5, 1, 7.7));
+        helper.runAfterDelay(25, () -> {
+            helper.assertTrue(spiked.getHealth() < 100.0F, "the spiked wall should hurt what touches it");
+            helper.assertValueEqual(plain.getHealth(), 100.0F, "health against a plain wall");
+            helper.succeed();
+        });
+    }
+
+    /** A Repeater Crossbow fires its three arrows one pull at a time, each at 80% of a normal crossbow's speed. */
+    @GameTest(structure = ARENA, maxTicks = 60)
+    public void repeaterCrossbowFiresOneArrowAtATime(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.teleportTo(helper.absolutePos(new BlockPos(8, 1, 8)).getX() + 0.5, helper.absolutePos(new BlockPos(8, 1, 8)).getY(),
+                helper.absolutePos(new BlockPos(8, 1, 8)).getZ() + 0.5);
+        ItemStack crossbow = new ItemStack(ModItems.REPEATER_CROSSBOW);
+        crossbow.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.ofNonEmpty(List.of(new ItemStack(Items.ARROW), new ItemStack(Items.ARROW), new ItemStack(Items.ARROW))));
+        player.setItemInHand(InteractionHand.MAIN_HAND, crossbow);
+        for (int shot = 1; shot <= 3; shot++) {
+            crossbow.getItem().use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+            helper.assertValueEqual(helper.getLevel().getEntitiesOfClass(Arrow.class, player.getBoundingBox().inflate(8.0)).size(), shot, "arrows in the air after pull " + shot);
+            ChargedProjectiles left = crossbow.get(DataComponents.CHARGED_PROJECTILES);
+            helper.assertValueEqual(left == null ? 0 : left.size(), 3 - shot, "arrows left after pull " + shot);
+        }
+        for (Arrow arrow : helper.getLevel().getEntitiesOfClass(Arrow.class, player.getBoundingBox().inflate(8.0))) {
+            double speed = arrow.getDeltaMovement().length();
+            helper.assertTrue(speed < 3.15 * 0.8 * 1.05 && speed > 3.15 * 0.8 * 0.5, "an arrow's speed was " + speed);
+        }
+        helper.succeed();
+    }
+
+    /** A Heavy Crossbow takes 1.5 times as long to wind as a crossbow and shoots at twice the speed; Power fits it, Multishot does not, and Power excludes Piercing. */
+    @GameTest(structure = ARENA, maxTicks = 60)
+    public void heavyCrossbowIsSlowToWindAndFast(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        BlockPos spot = helper.absolutePos(new BlockPos(8, 1, 8));
+        player.teleportTo(spot.getX() + 0.5, spot.getY(), spot.getZ() + 0.5);
+        ItemStack heavy = new ItemStack(ModItems.HEAVY_CROSSBOW);
+        helper.assertValueEqual(HeavyCrossbowItem.getChargeDuration(heavy, player), 25, "a crossbow's winding");
+        helper.assertValueEqual(((HeavyCrossbowItem) heavy.getItem()).windTicks(heavy, player), 37, "the heavy crossbow's winding");
+        heavy.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.ofNonEmpty(List.of(new ItemStack(Items.ARROW))));
+        player.setItemInHand(InteractionHand.MAIN_HAND, heavy);
+        heavy.getItem().use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+        List<Arrow> arrows = helper.getLevel().getEntitiesOfClass(Arrow.class, player.getBoundingBox().inflate(8.0));
+        helper.assertValueEqual(arrows.size(), 1, "arrows shot");
+        double speed = arrows.getFirst().getDeltaMovement().length();
+        helper.assertTrue(speed > 3.15 * 2 * 0.9 && speed < 3.15 * 2 * 1.05, "the arrow's speed was " + speed);
+
+        var enchantments = helper.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+        helper.assertTrue(enchantments.getOrThrow(Enchantments.POWER).value().canEnchant(heavy), "Power fits a Heavy Crossbow");
+        helper.assertTrue(enchantments.getOrThrow(Enchantments.PUNCH).value().canEnchant(heavy), "Punch fits too");
+        helper.assertTrue(!enchantments.getOrThrow(Enchantments.MULTISHOT).value().canEnchant(heavy), "Multishot does not");
+        helper.assertTrue(enchantments.getOrThrow(Enchantments.PIERCING).value().canEnchant(heavy), "Piercing does");
+        helper.assertTrue(enchantments.getOrThrow(Enchantments.MULTISHOT).value().canEnchant(new ItemStack(Items.CROSSBOW)), "Multishot still fits a crossbow");
+        helper.assertTrue(!Enchantment.areCompatible(enchantments.getOrThrow(Enchantments.POWER), enchantments.getOrThrow(Enchantments.PIERCING)),
+                "Power and Piercing exclude each other");
+        helper.succeed();
+    }
+
+    /** A Chain Crossbow fires by itself while held, from about a shot a second up to 4 a second after 2 seconds, and cannot take Quick Charge, Piercing or Multishot. */
+    @GameTest(structure = ARENA, maxTicks = 60)
+    public void chainCrossbowSpoolsUp(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        BlockPos spot = helper.absolutePos(new BlockPos(8, 1, 8));
+        player.teleportTo(spot.getX() + 0.5, spot.getY(), spot.getZ() + 0.5);
+        ItemStack chain = new ItemStack(ModItems.CHAIN_CROSSBOW);
+        player.setItemInHand(InteractionHand.MAIN_HAND, chain);
+        player.getInventory().add(new ItemStack(Items.ARROW, 30));
+        chain.getItem().use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+        helper.assertTrue(player.isUsingItem(), "holding right click starts it");
+        int duration = chain.getUseDuration(player);
+        int at40 = -1;
+        for (int held = 0; held <= 60; held++) {
+            chain.getItem().onUseTick(helper.getLevel(), player, chain, duration - held);
+            if (held == 40) {
+                at40 = helper.getLevel().getEntitiesOfClass(Arrow.class, player.getBoundingBox().inflate(8.0)).size();
+            }
+        }
+        int at60 = helper.getLevel().getEntitiesOfClass(Arrow.class, player.getBoundingBox().inflate(8.0)).size();
+        helper.assertValueEqual(at40, 5, "arrows in the first 2 seconds");
+        helper.assertValueEqual(at60 - at40, 4, "arrows in the next second at full spool (a second is 20 ticks here, so 4)");
+        helper.assertValueEqual(player.getInventory().countItem(Items.ARROW), 30 - at60, "arrows taken from the inventory");
+
+        var enchantments = helper.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+        helper.assertTrue(!enchantments.getOrThrow(Enchantments.QUICK_CHARGE).value().canEnchant(chain), "no Quick Charge");
+        helper.assertTrue(!enchantments.getOrThrow(Enchantments.PIERCING).value().canEnchant(chain), "no Piercing");
+        helper.assertTrue(!enchantments.getOrThrow(Enchantments.MULTISHOT).value().canEnchant(chain), "no Multishot");
+        helper.assertTrue(enchantments.getOrThrow(Enchantments.UNBREAKING).value().canEnchant(chain), "Unbreaking is fine");
+        helper.succeed();
+    }
+
+    /** A loaded Scoped Heavy Crossbow zooms instead of shooting when used, and fires on the player's left click. */
+    @GameTest(structure = ARENA, maxTicks = 60)
+    public void scopedHeavyCrossbowAimsThenShoots(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        BlockPos spot = helper.absolutePos(new BlockPos(8, 1, 8));
+        player.teleportTo(spot.getX() + 0.5, spot.getY(), spot.getZ() + 0.5);
+        ItemStack scoped = new ItemStack(ModItems.SCOPED_HEAVY_CROSSBOW);
+        scoped.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.ofNonEmpty(List.of(new ItemStack(Items.ARROW))));
+        player.setItemInHand(InteractionHand.MAIN_HAND, scoped);
+        scoped.getItem().use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+        helper.assertTrue(player.isScoping(), "a loaded scoped crossbow looks through its scope");
+        helper.assertValueEqual(helper.getLevel().getEntitiesOfClass(Arrow.class, player.getBoundingBox().inflate(8.0)).size(), 0, "arrows before the click");
+        ScopedHeavyCrossbowItem.fire(player);
+        helper.assertValueEqual(helper.getLevel().getEntitiesOfClass(Arrow.class, player.getBoundingBox().inflate(8.0)).size(), 1, "arrows after the click");
+        helper.assertTrue(!player.isScoping() && !ScopedHeavyCrossbowItem.isAiming(scoped), "the shot ends the aim and empties the crossbow");
+        helper.succeed();
+    }
+
+    /** A Scope goes on a Heavy Crossbow and comes off again by crafting; the crossbow keeps its enchantments and stays behind. */
+    @GameTest(structure = ARENA)
+    public void scopeMountsAndDismounts(GameTestHelper helper) {
+        ItemStack heavy = new ItemStack(ModItems.HEAVY_CROSSBOW);
+        heavy.setDamageValue(7);
+        heavy.enchant(helper.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.POWER), 3);
+        CraftingInput both = CraftingInput.of(2, 1, List.of(heavy, new ItemStack(ModItems.SCOPE)));
+        ScopeRecipes.Mount mount = new ScopeRecipes.Mount();
+        helper.assertTrue(mount.matches(both, helper.getLevel()), "a crossbow and a scope make a scoped one");
+        ItemStack scoped = mount.assemble(both);
+        helper.assertTrue(scoped.is(ModItems.SCOPED_HEAVY_CROSSBOW) && scoped.getDamageValue() == 7
+                && scoped.getEnchantments().equals(heavy.getEnchantments()) && !scoped.getEnchantments().isEmpty(), "the scoped crossbow keeps what the crossbow had");
+        helper.assertTrue(!mount.matches(CraftingInput.of(2, 1, List.of(heavy, new ItemStack(Items.SPYGLASS))), helper.getLevel()), "not with a spyglass");
+
+        CraftingInput alone = CraftingInput.of(1, 1, List.of(scoped));
+        ScopeRecipes.Dismount dismount = new ScopeRecipes.Dismount();
+        helper.assertTrue(dismount.matches(alone, helper.getLevel()) && dismount.assemble(alone).is(ModItems.SCOPE), "a scoped crossbow alone gives the scope");
+        ItemStack left = dismount.getRemainingItems(alone).getFirst();
+        helper.assertTrue(left.is(ModItems.HEAVY_CROSSBOW) && left.getDamageValue() == 7 && left.getEnchantments().equals(heavy.getEnchantments()),
+                "and leaves the crossbow, as it was");
+        helper.succeed();
+    }
+
+    /** A Crossbow Sentry shoots monsters inside its 160 degree view for 8 damage, and ignores those to the side or behind. */
+    @GameTest(structure = ARENA, maxTicks = 200)
+    public void crossbowSentryShootsOnlyInItsView(GameTestHelper helper) {
+        BlockPos pos = new BlockPos(8, 1, 8);
+        // On a wall (a stone block behind it, to the south), facing out to the north.
+        helper.setBlock(pos.south(), Blocks.STONE);
+        helper.setBlock(pos, ModBlocks.CROSSBOW_SENTRY.defaultBlockState()
+                .setValue(CrossbowSentryBlock.FACE, AttachFace.WALL).setValue(CrossbowSentryBlock.FACING, Direction.NORTH));
+        Husk ahead = durableHusk(helper, new Vec3(8.5, 1, 3.5));
+        Husk behind = durableHusk(helper, new Vec3(8.5, 1, 13.5));
+        Husk beside = durableHusk(helper, new Vec3(13.5, 1, 8.5));
+        helper.runAfterDelay(40, () -> {
+            helper.assertTrue(Math.abs(ahead.getHealth() - 92.0F) < 1.0F, "8 damage from one shot, health was " + ahead.getHealth());
+            helper.assertValueEqual(behind.getHealth(), 100.0F, "health of the one behind");
+            helper.assertValueEqual(beside.getHealth(), 100.0F, "health of the one beside (90 degrees off)");
+        });
+        // Three seconds to reload.
+        helper.runAfterDelay(120, () -> {
+            helper.assertTrue(ahead.getHealth() <= 85.0F, "a second shot after the reload");
+            helper.succeed();
+        });
+    }
+
+    /** Miners plan through a wall of barricades however hard they are, rather than treating it as unbreakable. */
+    @GameTest(structure = ARENA)
+    public void minersPlanThroughBarricades(GameTestHelper helper) {
+        for (Block wall : List.of(ModBlocks.PRIMITIVE_BARRICADE, ModBlocks.REINFORCED_BARRICADE)) {
+            for (int z = 0; z < 16; z++) {
+                placeWall(helper, wall, new BlockPos(8, 1, z), Direction.WEST);
+            }
+            // A small search budget, standing in for open country, where flooding the ground costs far more nodes than this arena has.
+            UntilDawnConfig.NODES_PER_SEARCH.set("150");
+            MobPath path;
+            try {
+                path = plan(helper, PathAbilities.MINER, START, PathGoal.near(helper.absolutePos(new BlockPos(13, 1, 8)), 1, "across"));
+            } finally {
+                UntilDawnConfig.NODES_PER_SEARCH.reset();
+            }
+            helper.assertTrue(path != null && path.reachesGoal(), wall + ": the Miner should find a way across, got " + moves(helper, path));
+            boolean digs = path.steps().stream().anyMatch(step -> step.breaks().stream().anyMatch(b -> helper.getLevel().getBlockState(b).is(wall)));
+            helper.assertTrue(digs, wall + ": the way across should be through the wall, got " + moves(helper, path));
+            for (int z = 0; z < 16; z++) {
+                for (int y = 1; y <= 3; y++) {
+                    helper.setBlock(new BlockPos(8, y, z), Blocks.AIR);
+                }
+            }
+        }
+        helper.succeed();
+    }
+
+    /** A Miner shut in behind a line of barricades digs through to the cow, though they are hard. */
+    @GameTest(structure = ARENA, maxTicks = 1500)
+    public void minerDigsThroughBarricades(GameTestHelper helper) {
+        // Dug quickly so the test is short; the point is that it digs at all.
+        UntilDawnConfig.MINER_DIG_SPEED.set("40");
+        for (int z = 0; z < 16; z++) {
+            placeWall(helper, ModBlocks.REINFORCED_BARRICADE, new BlockPos(8, 1, z), Direction.WEST);
+        }
+        Cow cow = helper.spawn(EntityTypes.COW, new BlockPos(13, 1, 8));
+        cow.setNoAi(true);
+        MinerZombie miner = helper.spawn(ModEntities.MINER, START);
+        miner.setTarget(cow);
+        passWhen(helper, "minerDigsThroughBarricades", () -> {
+            helper.assertTrue(isHurt(cow), "the miner has not got through to the cow yet: " + state(helper, miner));
+            UntilDawnConfig.MINER_DIG_SPEED.reset();
+        });
+    }
+
+    /** Two Miners of a squad at the same wall dig the same block together, and the cow is reached. */
+    @GameTest(structure = ARENA, maxTicks = 1500)
+    public void minersDigTheSameBlockTogether(GameTestHelper helper) {
+        UntilDawnConfig.MINER_DIG_SPEED.set("2");
+        for (int z = 0; z < 16; z++) {
+            placeWall(helper, ModBlocks.REINFORCED_BARRICADE, new BlockPos(8, 1, z), Direction.WEST);
+        }
+        Cow cow = helper.spawn(EntityTypes.COW, new BlockPos(13, 1, 8));
+        cow.setNoAi(true);
+        MinerZombie first = helper.spawn(ModEntities.MINER, new BlockPos(6, 1, 8));
+        MinerZombie second = helper.spawn(ModEntities.MINER, new BlockPos(6, 1, 9));
+        Squads.form(helper.getLevel(), List.of(first, second));
+        first.setTarget(cow);
+        second.setTarget(cow);
+        boolean[] helped = {false};
+        passWhen(helper, "minersDigTheSameBlockTogether", () -> {
+            helped[0] |= first.pathController().status().equals("helping a squadmate dig")
+                    || second.pathController().status().equals("helping a squadmate dig");
+            helper.assertTrue(helped[0], "neither Miner has helped the other dig yet: " + state(helper, first) + " / " + state(helper, second));
+            UntilDawnConfig.MINER_DIG_SPEED.reset();
+        });
     }
 
     /** Breaking a Workbench keeps its research on the dropped item, and placing that item again restores it. */
@@ -136,7 +471,7 @@ public class UntilDawnGameTests {
     public void workbenchKeepsResearchWhenBroken(GameTestHelper helper) {
         BlockPos pos = new BlockPos(8, 1, 8);
         helper.setBlock(pos, ModBlocks.WORKBENCH);
-        Identifier wooden = UntilDawn.id("wooden_sword");
+        Identifier wooden = UntilDawn.id("arrow");
         helper.getBlockEntity(pos, WorkbenchBlockEntity.class).research(wooden);
         helper.getLevel().destroyBlock(helper.absolutePos(pos), true);
         ItemEntity drop = helper.getEntities(EntityTypes.ITEM).stream()
@@ -798,5 +1133,23 @@ public class UntilDawnGameTests {
                 + ", status=" + controller.status()
                 + (path == null ? ", no path" : ", path " + controller.index() + "/" + (path.steps().size() - 1)
                 + (path.reachesGoal() ? " complete" : " partial") + " breaks=" + path.breakCount() + " places=" + path.placeCount());
+    }
+
+    /** A Bomber's blast wears walls down by itself (whatever the mob griefing rule): stone beside it falls, farther blocks only crack. */
+    @GameTest(structure = ARENA, maxTicks = 120)
+    public void bomberBlastDamagesWalls(GameTestHelper helper) {
+        for (int y = 1; y <= 2; y++) {
+            for (int x = 9; x <= 11; x++) {
+                helper.setBlock(new BlockPos(x, y, 8), Blocks.STONE);
+            }
+        }
+        org.kennyerf.untildawn.entity.BomberCreeper bomber = helper.spawn(ModEntities.BOMBER, new BlockPos(8, 1, 8));
+        bomber.setNoAi(true);
+        bomber.ignite();
+        helper.runAfterDelay(60, () -> {
+            helper.assertBlockPresent(Blocks.AIR, new BlockPos(9, 1, 8));
+            helper.assertBlockPresent(Blocks.STONE, new BlockPos(11, 1, 8));
+            helper.succeed();
+        });
     }
 }

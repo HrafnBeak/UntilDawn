@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "": [
+      { "model": "minecraft:block/fire_floor0" },
+      { "model": "minecraft:block/fire_floor1" }
+    ]
+  }
+}

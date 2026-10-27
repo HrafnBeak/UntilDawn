@@ -233,6 +233,46 @@ public class MobPathController {
         return miningPos;
     }
 
+    /** The block this mob is digging right now (it has hit it in the last few ticks), for squadmate Miners to join in on. */
+    public @Nullable BlockPos diggingPos() {
+        return miningPos != null && mob.tickCount - workTick < 5 ? miningPos : null;
+    }
+
+    /**
+     * A Miner with no job of its own digs the block a squadmate Miner is digging while it is within reach, leaving the
+     * block it was on if need be, so they break it together (block damage is shared) and then go on together.
+     */
+    private boolean assistDigging(ServerLevel level) {
+        Squad squad = Squads.of(mob);
+        if (squad == null || !abilities.canBreak() || abilities.explosive() || !(mob.onGround() || onClimbable())) {
+            return false;
+        }
+        Vec3 eyes = mob.getEyePosition();
+        BlockPos target = null;
+        double nearest = REACH * REACH;
+        for (Mob member : squad.members()) {
+            if (member == mob || !member.isAlive() || !(member instanceof WaveMob wave) || !wave.pathAbilities().canBreak()) {
+                continue;
+            }
+            BlockPos digging = wave.pathController().diggingPos();
+            if (digging == null || BlockView.isOpen(level, digging)) {
+                continue;
+            }
+            double distance = eyes.distanceToSqr(Vec3.atCenterOf(digging));
+            if (distance <= nearest) {
+                target = digging;
+                nearest = distance;
+            }
+        }
+        if (target == null) {
+            return false;
+        }
+        stepTicks++;
+        mine(level, feet(), target);
+        status = "helping a squadmate dig";
+        return true;
+    }
+
     public PathAbilities abilities() {
         return abilities;
     }
@@ -299,6 +339,10 @@ public class MobPathController {
             avoid.clear();
         }
         if (leapWaypoints != null && steerLeap()) {
+            return;
+        }
+        // Before making way: a Miner stays by a squadmate Miner's digging to help it, rather than step aside for it.
+        if (job == null && assistDigging(level)) {
             return;
         }
         if (isYielding() && yieldWay()) {
@@ -744,7 +788,9 @@ public class MobPathController {
                 continue;
             }
             boolean own = breaksItself(level.getBlockState(block));
-            if (squad != null && squad.isBreakClaimedByOther(block, mob)) {
+            // A Miner digs on a block a squadmate Miner has claimed: block damage is shared, so together they break it sooner.
+            boolean joinsDigging = own && abilities.canBreak() && !abilities.explosive();
+            if (squad != null && !joinsDigging && squad.isBreakClaimedByOther(block, mob)) {
                 // Kept from its own work it counts as blocked (see watchTask); waiting on a squadmate's digging it doesn't,
                 // or it would tell the very mob doing the digging to back off.
                 blockedThisTick = own;

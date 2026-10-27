@@ -346,7 +346,14 @@ public class WorkbenchScreen extends Screen {
         graphics.pose().translate(originX, originY);
         graphics.pose().scale(zoom, zoom);
 
-        // Links: down from the parent, across, and down into the child; green once the child is researched.
+        // Links: down from the parent, across, and down into the child; green once the child is researched. The stem
+        // down from the parent is shared by all its children, so it is green once any of them is, whatever order they draw in.
+        Set<Identifier> branched = new HashSet<>();
+        for (TechNode node : nodes) {
+            if (node.parent().isPresent() && isResearched(node)) {
+                branched.add(node.parent().get());
+            }
+        }
         for (TechNode node : nodes) {
             if (node.parent().isEmpty()) {
                 continue;
@@ -362,9 +369,25 @@ public class WorkbenchScreen extends Screen {
             int fy = (int) from[1] + NODE_HALF;
             int ty = (int) to[1] - NODE_HALF;
             int mid = (fy + ty) / 2;
-            graphics.fill(fx - 1, fy, fx + 1, mid + 1, colour);
             graphics.fill(Math.min(fx, tx) - 1, mid - 1, Math.max(fx, tx) + 1, mid + 1, colour);
             graphics.fill(tx - 1, mid - 1, tx + 1, ty, colour);
+        }
+
+        // The stems go last, so the corner where each meets its branch is the stem's colour, not the branch's.
+        for (TechNode node : nodes) {
+            if (node.parent().isEmpty()) {
+                continue;
+            }
+            float[] from = layout.get(node.parent().get());
+            float[] to = layout.get(node.id());
+            if (from == null || to == null) {
+                continue;
+            }
+            int stem = branched.contains(node.parent().get()) ? GOOD : LINE;
+            int fx = (int) from[0];
+            int fy = (int) from[1] + NODE_HALF;
+            int mid = (fy + (int) to[1] - NODE_HALF) / 2;
+            graphics.fill(fx - 1, fy, fx + 1, mid + 1, stem);
         }
 
         for (TechNode node : nodes) {

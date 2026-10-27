@@ -18,4 +18,7 @@ public interface CreeperAccessor {
 
     @Accessor("maxSwell")
     int untildawn$getMaxSwell();
+
+    @Accessor("swell")
+    int untildawn$getSwell();
 }

@@ -1,0 +1,10 @@
+{
+  "result": "untildawn:fire_flask",
+  "parent": "untildawn:arrow",
+  "research_cost": 30,
+  "craft_cost": [
+    { "ingredient": "minecraft:glass_bottle", "count": 1 },
+    { "ingredient": "minecraft:flint", "count": 1 },
+    { "ingredient": "minecraft:gunpowder", "count": 1 }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "result": "untildawn:crossbow_sentry",
+  "parent": "untildawn:spiky_barricade",
+  "research_cost": 30,
+  "craft_cost": [
+    {
+      "ingredient": "#minecraft:planks",
+      "count": 4
+    },
+    {
+      "ingredient": "minecraft:crossbow",
+      "count": 1
+    },
+    {
+      "ingredient": "minecraft:iron_ingot",
+      "count": 2
+    }
+  ]
+}

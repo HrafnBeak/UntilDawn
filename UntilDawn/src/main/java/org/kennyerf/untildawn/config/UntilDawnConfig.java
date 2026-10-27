@@ -103,6 +103,9 @@ public final class UntilDawnConfig {
             "Ticks a Builder takes to break an Unstable Plank or Unstable Ladder (20 ticks = 1 second)", 10, 1, 400));
     public static final Setting<Integer> BOMBER_EXPLOSION_RADIUS = add(Setting.ofInt("bomber.explosionRadius",
             "Bomber explosion size (vanilla creeper = 3)", 3, 0, 32));
+    public static final Setting<Double> BOMBER_BLOCK_DAMAGE = add(Setting.ofDouble("bomber.blockDamage",
+            "Damage a Bomber's blast does to a block at its centre, in ticks of Miner digging (stone takes 80); it falls off to nothing just past the explosion radius",
+            400.0, 0.0, 100_000.0));
     public static final Setting<Integer> BOMBER_FUSE = add(Setting.ofInt("bomber.fuseTicks",
             "Ticks from ignition to explosion (vanilla creeper = 30)", 30, 1, 400));
 

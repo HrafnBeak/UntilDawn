@@ -1,0 +1,11 @@
+{
+  "result": { "id": "untildawn:net_shot", "count": 1 },
+  "parent": "untildawn:arrow",
+  "research_cost": 30,
+  "craft_cost": [
+    { "ingredient": "minecraft:string", "count": 4 },
+    { "ingredient": "minecraft:tripwire_hook", "count": 1 },
+    { "ingredient": "minecraft:feather", "count": 1 }
+  ],
+  "order": -1
+}

@@ -67,6 +67,8 @@ public final class WaveManager {
     private static final int NIGHT_START = 13000;
     private static final int NIGHT_END = 23000;
     private static final int DAY_LENGTH = 24000;
+    /** Extra ticks the clock gains every server tick while the Core screen is skipping to night. */
+    private static final int SKIP_TICKS_PER_TICK = 120;
 
     private static final ServerBossEvent BOSS_BAR = new ServerBossEvent(
             UUID.fromString("5f1c3b7e-6d2a-4c1e-9a7b-8e0d2c4f6a10"),
@@ -168,6 +170,25 @@ public final class WaveManager {
     public static boolean isNight(ServerLevel level) {
         long dayTime = level.getOverworldClockTime() % DAY_LENGTH;
         return dayTime >= NIGHT_START && dayTime < NIGHT_END;
+    }
+
+    /** Clock ticks until the next night starts (0 if it is night); the clock runs faster while the night is being skipped to. */
+    public static long ticksUntilNight(ServerLevel level) {
+        long dayTime = level.getOverworldClockTime() % DAY_LENGTH;
+        if (dayTime >= NIGHT_START && dayTime < NIGHT_END) {
+            return 0;
+        }
+        return dayTime < NIGHT_START ? NIGHT_START - dayTime : DAY_LENGTH - dayTime + NIGHT_START;
+    }
+
+    /** Whether the daylight is being sped up towards night (see the Core screen). */
+    public static boolean isSkippingToNight(ServerLevel level) {
+        return CoreState.get(level.getServer()).skippingToNight;
+    }
+
+    /** How many clock ticks pass per server tick while the night is being skipped to. */
+    public static int skipRate() {
+        return SKIP_TICKS_PER_TICK + 1;
     }
 
     private static boolean isTaggedWaveMob(Entity entity) {
@@ -272,6 +293,15 @@ public final class WaveManager {
             return;
         }
 
+        if (state.skippingToNight) {
+            if (isNight(level)) {
+                state.skippingToNight = false;
+            } else {
+                server.registryAccess().get(WorldClocks.OVERWORLD)
+                        .ifPresent(clock -> server.clockManager().addTicks(clock, SKIP_TICKS_PER_TICK));
+            }
+        }
+
         boolean night = isNight(level);
         if (night != state.wasNight) {
             state.wasNight = night;
@@ -314,6 +344,7 @@ public final class WaveManager {
             }
             updateSpawnPoints(server, state);
             updateBossBar(server, state, night);
+            CoreInterface.refreshViewers(level, state);
         }
     }
 
@@ -354,7 +385,7 @@ public final class WaveManager {
     // ---------------------------------------------------------------- waves
 
     /** Nights progressively bring more enemies. */
-    static int waveSize(int night) {
+    public static int waveSize(int night) {
         int size = UntilDawnConfig.WAVE_BASE_SIZE.get() + (night - 1) * UntilDawnConfig.WAVE_GROWTH.get();
         return Math.min(size, UntilDawnConfig.WAVE_MAX_SIZE.get());
     }
@@ -435,7 +466,7 @@ public final class WaveManager {
         };
     }
 
-    private static UntilDawnConfig.MobSettings settingsOf(String name) {
+    public static UntilDawnConfig.MobSettings settingsOf(String name) {
         return switch (name) {
             case "miner" -> UntilDawnConfig.MINER;
             case "builder" -> UntilDawnConfig.BUILDER;

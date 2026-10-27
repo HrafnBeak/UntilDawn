@@ -1,0 +1,9 @@
+{
+  "result": { "id": "minecraft:arrow", "count": 16 },
+  "research_cost": 20,
+  "craft_cost": [
+    { "ingredient": "minecraft:stick", "count": 16 },
+    { "ingredient": "minecraft:flint", "count": 2 },
+    { "ingredient": "untildawn:scrap", "count": 3 }
+  ]
+}

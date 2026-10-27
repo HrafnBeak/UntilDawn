@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "untildawn:core"
+    "untildawn:core",
+    "untildawn:reinforced_barricade"
   ]
 }

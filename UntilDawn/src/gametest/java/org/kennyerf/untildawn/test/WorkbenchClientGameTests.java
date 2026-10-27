@@ -35,8 +35,9 @@ public class WorkbenchClientGameTests implements FabricClientGameTest {
                 player.setGameMode(GameType.SURVIVAL);
                 BlockPos pos = player.blockPosition().offset(2, 0, 0);
                 player.level().setBlockAndUpdate(pos, ModBlocks.WORKBENCH.defaultBlockState());
-                player.getInventory().add(new ItemStack(ModItems.SCRAP, 12));
-                player.getInventory().add(new ItemStack(Items.OAK_PLANKS, 3));
+                player.getInventory().add(new ItemStack(ModItems.SCRAP, 30));
+                player.getInventory().add(new ItemStack(Items.STICK, 20));
+                player.getInventory().add(new ItemStack(Items.FLINT, 3));
                 return pos;
             });
             context.waitTicks(5);
@@ -49,30 +50,31 @@ public class WorkbenchClientGameTests implements FabricClientGameTest {
             context.takeScreenshot("workbench-open");
 
             double scale = context.computeOnClient(mc -> mc.getWindow().getGuiScale());
-            Identifier wooden = UntilDawn.id("wooden_sword");
-            Identifier stone = UntilDawn.id("stone_sword");
+            Identifier wooden = UntilDawn.id("arrow");
+            Identifier stone = UntilDawn.id("heavy_crossbow");
 
             // Clicking an item selects it.
             clickAt(context, scale, context.computeOnClient(mc -> screen(mc).nodeCentre(stone)), 0);
-            expect(context.computeOnClient(mc -> stone.equals(screen(mc).selectedId())), "clicking the stone sword should select it");
+            expect(context.computeOnClient(mc -> stone.equals(screen(mc).selectedId())), "clicking the heavy crossbow should select it");
             clickAt(context, scale, context.computeOnClient(mc -> screen(mc).nodeCentre(wooden)), 0);
-            expect(context.computeOnClient(mc -> wooden.equals(screen(mc).selectedId())), "clicking the wooden sword should select it");
+            expect(context.computeOnClient(mc -> wooden.equals(screen(mc).selectedId())), "clicking the arrows should select it");
 
-            // The Research button takes 5 Scrap; Craft then gives the sword for 2 planks (12 - 5 Scrap, 3 - 2 planks left).
+            // The Research button takes 20 Scrap; Craft then gives 16 arrows for 16 sticks, 2 flint and 3 Scrap (30 - 23 Scrap, 20 - 16 sticks, 3 - 2 flint left).
             clickAt(context, scale, context.computeOnClient(mc -> screen(mc).researchButtonCentre()), 0);
             context.waitTicks(5);
             expect(server.computeOnServer(s -> ((WorkbenchBlockEntity) s.overworld().getBlockEntity(bench)).isResearched(wooden)),
-                    "the Research button should research the wooden sword");
+                    "the Research button should research the arrows");
             context.takeScreenshot("workbench-researched");
             clickAt(context, scale, context.computeOnClient(mc -> screen(mc).craftButtonCentre()), 0);
             context.waitTicks(5);
             String inventory = server.computeOnServer(s -> {
                 ServerPlayer player = s.getPlayerList().getPlayers().getFirst();
                 return player.getInventory().countItem(ModItems.SCRAP) + " scrap, "
-                        + player.getInventory().countItem(Items.OAK_PLANKS) + " planks, "
-                        + player.getInventory().countItem(Items.WOODEN_SWORD) + " sword";
+                        + player.getInventory().countItem(Items.STICK) + " sticks, "
+                        + player.getInventory().countItem(Items.FLINT) + " flint, "
+                        + player.getInventory().countItem(Items.ARROW) + " arrows";
             });
-            expect(inventory.equals("7 scrap, 1 planks, 1 sword"), "research and craft should take their costs: " + inventory);
+            expect(inventory.equals("7 scrap, 4 sticks, 1 flint, 16 arrows"), "research and craft should take their costs: " + inventory);
 
             // Dragging with either button pans the tree.
             float startX = context.computeOnClient(mc -> screen(mc).viewX());
@@ -88,7 +90,7 @@ public class WorkbenchClientGameTests implements FabricClientGameTest {
 
             // Right-clicking an item selects it too.
             clickAt(context, scale, context.computeOnClient(mc -> screen(mc).nodeCentre(stone)), 1);
-            expect(context.computeOnClient(mc -> stone.equals(screen(mc).selectedId())), "right-clicking the stone sword should select it");
+            expect(context.computeOnClient(mc -> stone.equals(screen(mc).selectedId())), "right-clicking the heavy crossbow should select it");
 
             // Scrolling zooms toward the cursor.
             float zoomBefore = context.computeOnClient(mc -> screen(mc).viewZoom());

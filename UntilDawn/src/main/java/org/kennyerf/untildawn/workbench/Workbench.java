@@ -102,7 +102,7 @@ public final class Workbench {
     }
 
     /** Takes every cost from the player's inventory, or nothing at all if they can't pay it all. */
-    private static boolean take(ServerPlayer player, List<TechNode.Cost> costs) {
+    public static boolean take(ServerPlayer player, List<TechNode.Cost> costs) {
         NonNullList<ItemStack> items = player.getInventory().getNonEquipmentItems();
         // Worked out on copies first, so costs that overlap (two tags sharing items) are counted honestly.
         List<ItemStack> after = new ArrayList<>(items.size());

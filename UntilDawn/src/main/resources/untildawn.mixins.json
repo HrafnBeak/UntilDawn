@@ -6,7 +6,8 @@
   "mixins": [
     "MobArrowMixin",
     "CreeperAccessor",
-    "WaveMobPushMixin"
+    "WaveMobPushMixin",
+    "ScopedCrossbowMixin"
   ],
   "injectors": {
     "defaultRequire": 1
