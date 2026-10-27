@@ -1,0 +1,9 @@
+# Build output and caches
+build/
+.gradle/
+.vs/
+.idea/
+run/
+*.class
+*.swp
+.DS_Store

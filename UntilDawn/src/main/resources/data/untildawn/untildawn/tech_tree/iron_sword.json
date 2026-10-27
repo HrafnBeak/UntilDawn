@@ -1,0 +1,8 @@
+{
+  "result": "minecraft:iron_sword",
+  "parent": "untildawn:stone_sword",
+  "research_cost": 30,
+  "craft_cost": [
+    { "ingredient": "minecraft:iron_ingot", "count": 2 }
+  ]
+}

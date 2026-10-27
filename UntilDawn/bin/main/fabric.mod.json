@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "monster",
+  "version": "${version}",
+  "name": "Monster",
+  "description": "Place the Core and defend it from ever-growing waves of Miners, Builders, Bombers, Archers and Longbow Men every night.",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "org.kennyerf.monster.client.MonsterDataGenerator"
+    ],
+    "client": [
+      "org.kennyerf.monster.client.MonsterClient"
+    ],
+    "main": [
+      "org.kennyerf.monster.Monster"
+    ]
+  },
+  "mixins": [
+    "monster.mixins.json",
+    {
+      "config": "monster.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

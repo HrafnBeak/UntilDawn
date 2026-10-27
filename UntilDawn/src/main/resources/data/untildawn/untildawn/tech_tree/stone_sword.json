@@ -1,0 +1,8 @@
+{
+  "result": "minecraft:stone_sword",
+  "parent": "untildawn:wooden_sword",
+  "research_cost": 15,
+  "craft_cost": [
+    { "ingredient": "#minecraft:stone_tool_materials", "count": 2 }
+  ]
+}

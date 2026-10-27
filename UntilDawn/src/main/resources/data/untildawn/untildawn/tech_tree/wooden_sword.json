@@ -1,0 +1,7 @@
+{
+  "result": "minecraft:wooden_sword",
+  "research_cost": 5,
+  "craft_cost": [
+    { "ingredient": "#minecraft:planks", "count": 2 }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "monster-test",
+  "version": "1.0.0",
+  "name": "Monster Game Tests",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "org.kennyerf.monster.test.MonsterGameTests"
+    ]
+  },
+  "depends": {
+    "monster": "*",
+    "fabric-gametest-api-v1": "*"
+  }
+}
