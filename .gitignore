@@ -8,3 +8,4 @@ run/
 *.swp
 .DS_Store
 build.bat
+Versions/
