@@ -7,3 +7,4 @@ run/
 *.class
 *.swp
 .DS_Store
+build.bat
