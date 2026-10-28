@@ -6,7 +6,7 @@
       "y": 270
     },
     "face=ceiling,facing=east,ready=false": {
-      "model": "untildawn:block/spike_trap_down",
+      "model": "untildawn:block/spike_trap_up",
       "x": 180,
       "y": 270
     },
@@ -16,7 +16,7 @@
       "y": 180
     },
     "face=ceiling,facing=north,ready=false": {
-      "model": "untildawn:block/spike_trap_down",
+      "model": "untildawn:block/spike_trap_up",
       "x": 180,
       "y": 180
     },
@@ -25,7 +25,7 @@
       "x": 180
     },
     "face=ceiling,facing=south,ready=false": {
-      "model": "untildawn:block/spike_trap_down",
+      "model": "untildawn:block/spike_trap_up",
       "x": 180
     },
     "face=ceiling,facing=west,ready=true": {
@@ -34,7 +34,7 @@
       "y": 90
     },
     "face=ceiling,facing=west,ready=false": {
-      "model": "untildawn:block/spike_trap_down",
+      "model": "untildawn:block/spike_trap_up",
       "x": 180,
       "y": 90
     },
@@ -43,21 +43,21 @@
       "y": 90
     },
     "face=floor,facing=east,ready=false": {
-      "model": "untildawn:block/spike_trap_down",
+      "model": "untildawn:block/spike_trap_up",
       "y": 90
     },
     "face=floor,facing=north,ready=true": {
       "model": "untildawn:block/spike_trap"
     },
     "face=floor,facing=north,ready=false": {
-      "model": "untildawn:block/spike_trap_down"
+      "model": "untildawn:block/spike_trap_up"
     },
     "face=floor,facing=south,ready=true": {
       "model": "untildawn:block/spike_trap",
       "y": 180
     },
     "face=floor,facing=south,ready=false": {
-      "model": "untildawn:block/spike_trap_down",
+      "model": "untildawn:block/spike_trap_up",
       "y": 180
     },
     "face=floor,facing=west,ready=true": {
@@ -65,7 +65,7 @@
       "y": 270
     },
     "face=floor,facing=west,ready=false": {
-      "model": "untildawn:block/spike_trap_down",
+      "model": "untildawn:block/spike_trap_up",
       "y": 270
     },
     "face=wall,facing=east,ready=true": {
@@ -74,7 +74,7 @@
       "y": 90
     },
     "face=wall,facing=east,ready=false": {
-      "model": "untildawn:block/spike_trap_down",
+      "model": "untildawn:block/spike_trap_up",
       "x": 90,
       "y": 90
     },
@@ -83,7 +83,7 @@
       "x": 90
     },
     "face=wall,facing=north,ready=false": {
-      "model": "untildawn:block/spike_trap_down",
+      "model": "untildawn:block/spike_trap_up",
       "x": 90
     },
     "face=wall,facing=south,ready=true": {
@@ -92,7 +92,7 @@
       "y": 180
     },
     "face=wall,facing=south,ready=false": {
-      "model": "untildawn:block/spike_trap_down",
+      "model": "untildawn:block/spike_trap_up",
       "x": 90,
       "y": 180
     },
@@ -102,7 +102,7 @@
       "y": 270
     },
     "face=wall,facing=west,ready=false": {
-      "model": "untildawn:block/spike_trap_down",
+      "model": "untildawn:block/spike_trap_up",
       "x": 90,
       "y": 270
     }
