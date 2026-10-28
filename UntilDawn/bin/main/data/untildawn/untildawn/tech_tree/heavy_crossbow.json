@@ -9,5 +9,6 @@
     { "ingredient": "minecraft:tripwire_hook", "count": 2 },
     { "ingredient": "minecraft:diamond", "count": 1 },
     { "ingredient": "minecraft:stone_button", "count": 2 }
-  ]
+  ],
+  "order": 3
 }
