@@ -6,5 +6,6 @@
     { "ingredient": "minecraft:glass_bottle", "count": 1 },
     { "ingredient": "minecraft:flint", "count": 1 },
     { "ingredient": "minecraft:gunpowder", "count": 1 }
-  ]
+  ],
+  "order": 2
 }
